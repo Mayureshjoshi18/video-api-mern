@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { trimVideo} from '../services/VideoService';
+import { mergeVideos, trimVideo} from '../services/VideoService';
 
 
 
@@ -15,5 +15,15 @@ export const trimVideoHandler = async (req: Request, res: Response, next: NextFu
         res.json(result);
     } catch (error: any) {
         next(error); // Pass error to the middleware
+    }
+};
+
+export const mergeVideosHandler = async (req: Request, res: Response) => {
+    try {
+        const { videoIds } = req.body;
+        const result = await mergeVideos(videoIds);
+        res.json(result);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
     }
 };
