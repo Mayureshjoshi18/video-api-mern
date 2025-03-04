@@ -5,16 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import fss from 'fs/promises';
 import fs from 'fs';
 import multer from 'multer';
-
-
+import { Constants as constants } from '../constants';
 
 const UPLOAD_DIR = path.join(__dirname, '../../uploads');
-const MAX_SIZE_MB = 25; // Maximum file size in MB
-const MIN_DURATION_SEC = 5; // Minimum video duration in seconds
-const MAX_DURATION_SEC = 300; // Maximum video duration in seconds (e.g., 5 mins)
-const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/mkv", "video/webm", "video/avi"];
-
-
 if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
@@ -27,6 +20,7 @@ export const trimVideo = async (videoId: string, start: number, end: number) => 
     if (!video) throw new Error('Video not found');
 
     const videoPath = path.join(__dirname, '../../uploads', video.filename);
+    console.log(videoPath);
 
     try {
         await fss.access(videoPath);
@@ -89,7 +83,7 @@ export const mergeVideos = async (videoIds: string[]) => {
 
 
 export const validateFileSize = (size: number) => {
-    return (size / (1024 * 1024)) <= MAX_SIZE_MB;
+    return (size / (1024 * 1024)) <= constants.MAX_SIZE_MB;
 };
 
 
@@ -103,7 +97,7 @@ export const validateVideoDuration = async (filePath: string): Promise<boolean> 
                 return;
             }
             const duration = metadata.format.duration;
-            if (duration < MIN_DURATION_SEC || duration > MAX_DURATION_SEC) {
+            if (duration < constants.MIN_DURATION_SEC || duration > constants.MAX_DURATION_SEC) {
                 resolve(false);
             } else {
                 resolve(true);
@@ -138,7 +132,7 @@ export const uploadVideo = async (file: Express.Multer.File) => {
 
     const { originalname, mimetype, size } = file;
 
-    if (!ALLOWED_VIDEO_TYPES.includes(mimetype)) {
+    if (!constants.ALLOWED_VIDEO_TYPES.includes(mimetype)) {
         throw new Error("Invalid file type. Only video files are allowed.");
     }
 
