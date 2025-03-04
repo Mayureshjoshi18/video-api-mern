@@ -15,5 +15,12 @@ export const initDB = async () => {
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`);
 
+    await db.exec(`CREATE TABLE IF NOT EXISTS shared_links (
+        id TEXT PRIMARY KEY,
+        videoId TEXT,
+        expiresAt TIMESTAMP,
+        FOREIGN KEY(videoId) REFERENCES videos(id)
+    )`);
+
     return db;
 };
