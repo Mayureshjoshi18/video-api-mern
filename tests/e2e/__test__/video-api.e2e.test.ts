@@ -30,7 +30,7 @@ describe('Video API E2E Tests', () => {
         
         const response = await request(app)
             .post('/upload')
-            .set('Authorization', 'Bearer static-token')
+            .set('Authorization', `Bearer ${API_TOKEN}`)
             .set('Content-Type', 'multipart/form-data')
             .attach('video', filePath, 'test-video.mp4');
 
@@ -54,7 +54,7 @@ describe('Video API E2E Tests', () => {
 
         const response = await request(app)
             .post('/trim')
-            .set('Authorization', 'Bearer static-token')
+            .set('Authorization', `Bearer ${API_TOKEN}`)
             .set('Content-Type', 'application/json')
             .send({ videoId, start, end });
 
@@ -69,14 +69,14 @@ describe('Video API E2E Tests', () => {
     it('should merge two videos', async () => {
         const videoIds = [
             `${responseVideoName}`,
-            '1741204110090-test-video.mp4',
+            '1741372208982-test-video.mp4',
         ];
     
         console.log('Sending request with:', { videoIds }); 
     
         const response = await request(app)
             .post('/merge')
-            .set('Authorization', 'Bearer static-token')
+            .set('Authorization', `Bearer ${API_TOKEN}`)
             .set('Content-Type', 'application/json')
             .send({ videoIds });
     
@@ -96,13 +96,14 @@ describe('Video API E2E Tests', () => {
             .post('/share')
             .set('Authorization', `Bearer ${API_TOKEN}`)
             .set('Content-Type', 'application/json')
-            .send({ videoId: "95448922-a90d-45bb-a846-7b4c95c0ffb0", expiryTime : 300 });
+            .send({ videoId: `${responseVideoId}`, expiryTime : 300 });
 
         console.log("share response: ", response.body);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('link');
         expect(response.body.link).toMatch(/^\/view\/[a-f0-9-]+$/);
         sharedLink = response.body.link.split('/').pop();
+        console.log(sharedLink);
     });
 
     it('should allow viewing a shared video', async () => {

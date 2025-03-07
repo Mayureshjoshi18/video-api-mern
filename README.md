@@ -8,6 +8,7 @@ This project provides an online video editing web API that allows users to uploa
 ### Prerequisites
 - Node.js (>= 16.x)
 - npm (>= 8.x)
+- FFmpeg (must be installed on your system)
 
 ### Installation
 
@@ -35,6 +36,11 @@ The server will run on `http://localhost:3000`.
 Run end-to-end tests:
 ```sh
 npx jest tests/e2e/__test__/video-api.e2e.test.ts
+```
+or 
+
+```sh
+npm test
 ```
 
 ## API Endpoints
