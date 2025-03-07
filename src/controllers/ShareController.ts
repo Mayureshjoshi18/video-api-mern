@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { shareVideo } from '../services/ShareService';
 import { initDB } from '../database';
 import fs from 'fs';
-import { Constants as constants } from '../constants';
 import path from 'path';
 
 

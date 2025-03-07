@@ -19,10 +19,12 @@ export const trimVideoHandler = async (req: Request, res: Response, next: NextFu
 };
 
 export const mergeVideosHandler = async (req: Request, res: Response) => {
+    const { videoIds } = req.body;
     try {
-        const { videoIds } = req.body;
-        const result = await mergeVideos(videoIds);
-        res.json(result);
+        if(videoIds || Array.isArray(videoIds) || videoIds.length > 2) {
+            const result = await mergeVideos(videoIds);
+            res.json(result);
+        }
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

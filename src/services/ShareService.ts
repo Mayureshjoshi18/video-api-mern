@@ -31,5 +31,6 @@ const cleanupExpiredLinks = async () => {
     console.log('Expired shared links cleaned up');
 };
 
-// Run cleanup every 10 minutes
-setInterval(cleanupExpiredLinks, 10 * 60 * 1000);
+if (process.env.NODE_ENV !== 'test') {
+    setInterval(cleanupExpiredLinks, 10 * 60 * 1000);
+}

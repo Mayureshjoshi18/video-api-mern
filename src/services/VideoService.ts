@@ -7,7 +7,9 @@ import fs from 'fs';
 import multer from 'multer';
 import { Constants as constants } from '../constants';
 
+
 const UPLOAD_DIR = path.join(__dirname, '../../uploads');
+
 if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
@@ -63,6 +65,8 @@ export const mergeVideos = async (videoIds: string[]) => {
     const outputFilename = `merged_${uuidv4()}.mp4`;
     const outputPath = path.join(UPLOAD_DIR, outputFilename);
 
+    console.log(outputPath);
+
     return new Promise((resolve, reject) => {
         const mergeCommand = ffmpeg();
         
@@ -117,10 +121,18 @@ export const getVideoMetadata = async (id: string) => {
 };
 
 
+let uploadFileName: string;
+
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads')),
-    filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../../uploads'));
+    },
+    filename: (req, file, cb) => {
+        uploadFileName = `${Date.now()}-${file.originalname}`;  // Update fileName correctly
+        cb(null, uploadFileName);
+    }
 });
+
 
 export const upload = multer({ storage, limits: { fileSize: 25 * 1024 * 1024 } }).single('video');
 
@@ -132,6 +144,8 @@ export const uploadVideo = async (file: Express.Multer.File) => {
 
     const { originalname, mimetype, size } = file;
 
+    console.log(file);
+
     if (!constants.ALLOWED_VIDEO_TYPES.includes(mimetype)) {
         throw new Error("Invalid file type. Only video files are allowed.");
     }
@@ -141,9 +155,11 @@ export const uploadVideo = async (file: Express.Multer.File) => {
 
     await db.run("INSERT INTO videos (id, filename, size) VALUES (?, ?, ?)", [
         videoId,
-        originalname,
+        uploadFileName,
         size,
     ]);
 
-    return { id: videoId, filename: originalname };
+    console.log(uploadFileName);
+
+    return { id: videoId, filename: uploadFileName };
 };

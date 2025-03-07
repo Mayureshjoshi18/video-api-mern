@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "faddd517-47ba-44eb-b5f4-08d195250bf9",
+		"name": "Video-mern-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "42737465"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/upload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer static-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "video",
+							"type": "file",
+							"src": "/home/mayurx/turbo-repo/video-api-mern/tests/e2e/__test__/test-video.mp4"
+						}
+					]
+				},
+				"url": "localhost:3000/upload"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/share",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer static-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"videoId\": \"95448922-a90d-45bb-a846-7b4c95c0ffb0\",\n  \"expiryTime\": 300\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:3000/share"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/merge",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer static-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"videoIds\" : [\"merged_0a283d2a-19b4-49b4-9c22-5defbad91d31.mp4\",\"merged_0a283d2a-19b4-49b4-9c22-5defbad91d31.mp4\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:3000/merge"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/trim",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer static-token",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"videoId\": \"12345.mp4\",\n      \"start\": 10,\n      \"end\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:3000/trim"
+			},
+			"response": []
+		}
+	]
+}
